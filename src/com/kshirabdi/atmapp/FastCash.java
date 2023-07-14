@@ -2,10 +2,11 @@ package com.kshirabdi.atmapp;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.ResultSet;
 
 import javax.swing.*;
 import java.util.Date;
-//import java.sql.Date;
+import java.sql.*;
 public class FastCash extends JFrame implements ActionListener{
 	
 	String pinnumber;
@@ -90,21 +91,29 @@ public class FastCash extends JFrame implements ActionListener{
 		else 
 		{
 			String amount = ((JButton)e.getSource()).getText().substring(3);
-			DBConnection con = new DBConnection();
+			
 			try {
-
-				con.rs=con.statement.executeQuery("SELECT * FROM BANK WHERE PIN =' "+pinnumber+"'");
+				DBConnection con = new DBConnection();
+				
+				con.rs = con.statement.executeQuery("SELECT * FROM BANK WHERE PIN = '"+pinnumber+"' ");
+				
 				int balance = 0;
+				
+		
 				while(con.rs.next())
 				{
+					
 					if(con.rs.getString("TYPE_OF_TRANSACTION").equals("Deposit"))
 					{
 						balance += Integer.parseInt(con.rs.getString("AMOUNT"));
+						
 					}else{
 						balance -= Integer.parseInt(con.rs.getString("AMOUNT"));
+					
+
 					}
 				}
-				if( (e.getSource() != back) && (balance < Integer.parseInt(amount)))
+				if( (e.getSource() != back) && balance < Integer.parseInt(amount))
 				{
 					JOptionPane.showMessageDialog(null, "Insufficient Balance");
 					return;

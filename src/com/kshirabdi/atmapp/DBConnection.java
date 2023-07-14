@@ -19,5 +19,10 @@ public class DBConnection {
 			System.out.println(e);
 		}
 	}
+	public PreparedStatement prepareStatement(String string) {
+		// TODO Auto-generated method stub
+		
+		return null;
+	}
 
 }

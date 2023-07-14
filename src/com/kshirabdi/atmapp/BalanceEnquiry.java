@@ -9,6 +9,7 @@ import javax.swing.*;
 public class BalanceEnquiry extends JFrame implements ActionListener{
 	String pinnumber;
 	JButton back;
+	int balance =0;
 	BalanceEnquiry(String pinnumber)
 	{
 		this.pinnumber = pinnumber;
@@ -27,26 +28,28 @@ public class BalanceEnquiry extends JFrame implements ActionListener{
 		back.addActionListener(this);
 		image.add(back);
 		
-		DBConnection con = new DBConnection();
-		int balance = 0;
 		try {
-
-			con.rs=con.statement.executeQuery("SELECT * FROM BANK WHERE PIN =' "+pinnumber+"'");
-		
+			DBConnection con = new DBConnection();
+			con.rs = con.statement.executeQuery("SELECT * FROM BANK WHERE PIN ='"+pinnumber+"' ");
 			while(con.rs.next())
 			{
+				
 				if(con.rs.getString("TYPE_OF_TRANSACTION").equals("Deposit"))
 				{
 					balance += Integer.parseInt(con.rs.getString("AMOUNT"));
+					
 				}else{
 					balance -= Integer.parseInt(con.rs.getString("AMOUNT"));
-				}
 				
+
+				}
 			}
+					
 		}catch(Exception ex)
 		{
 			System.out.println(ex);
 		}
+
 		
 		JLabel text = new JLabel ("Your current Account Balance is Rs :"+ balance);
 		text.setBounds(170, 300, 400, 30);

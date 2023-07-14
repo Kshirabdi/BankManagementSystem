@@ -67,8 +67,34 @@ public class Withdrawl extends JFrame implements ActionListener{
 			}
 			else
 			{
+				
 				try {
 					DBConnection con = new DBConnection();
+					con.rs = con.statement.executeQuery("SELECT * FROM BANK WHERE PIN = '"+pinnumber+"' ");
+					int balance = 0;
+					
+					
+					while(con.rs.next())
+					{
+						
+						if(con.rs.getString("TYPE_OF_TRANSACTION").equals("Deposit"))
+						{
+							balance += Integer.parseInt(con.rs.getString("AMOUNT"));
+							
+						}else{
+							balance -= Integer.parseInt(con.rs.getString("AMOUNT"));
+						
+
+						}
+					}
+					if( (e.getSource() == withdraw) && balance < Integer.parseInt(snumber))
+					{
+						JOptionPane.showMessageDialog(null, "Insufficient Balance");
+						return;
+					}
+					
+					
+					
 					String query = "INSERT INTO BANK VALUES ('"+ pinnumber+"', '"+ date+"', 'Withdraw','"+snumber+"')";
 					con.statement.executeUpdate(query);
 					JOptionPane.showMessageDialog(null, "Rs "+snumber+" Withdrawed Successfully");

@@ -7,6 +7,7 @@ import javax.swing.*;
 
 public class MiniStatement extends JFrame implements ActionListener {
 	String pinnumber;
+	int rupees = 0;
 	MiniStatement(String pinnumber)
 	{
 		this.pinnumber = pinnumber;
@@ -46,7 +47,7 @@ public class MiniStatement extends JFrame implements ActionListener {
 		
 		try {
 			DBConnection con = new DBConnection();
-			int rupees = 0;
+			
 			con.rs=con.statement.executeQuery("SELECT * FROM BANK WHERE PIN = '"+pinnumber+"'");
 			while(con.rs.next())
 			{
